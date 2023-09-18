@@ -1,4 +1,5 @@
 import logging
+from typing import Optional
 
 from ntgcalls import AudioDescription
 from ntgcalls import MediaDescription
@@ -8,7 +9,6 @@ from pytgcalls.types.input_stream.audio_image_piped import AudioImagePiped
 from pytgcalls.types.input_stream.stream import Stream
 
 py_logger = logging.getLogger('pytgcalls')
-
 
 class StreamParams:
     @staticmethod
@@ -26,10 +26,12 @@ class StreamParams:
             )
 
         if stream.stream_video is not None:
-            if stream.stream_video.parameters.frame_rate % 5 != 0 and \
-                    not isinstance(stream, AudioImagePiped):
+            if (
+                stream.stream_video.parameters.frame_rate % 5 != 0
+                and not isinstance(stream.stream_video, AudioImagePiped)
+            ):
                 py_logger.warning(
-                    'For better experience the '
+                    'For a better experience, the '
                     'video frame rate must be a multiple of 5',
                 )
 
@@ -45,3 +47,4 @@ class StreamParams:
             audio=audio_description,
             video=video_description,
         )
+        
