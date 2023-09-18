@@ -1,8 +1,6 @@
 import asyncio
 from asyncio import AbstractEventLoop
-from typing import Any
-from typing import Callable
-
+from typing import Any, Callable
 
 class ToAsync:
     def __init__(self, function: Callable, *args):
@@ -13,8 +11,7 @@ class ToAsync:
     async def _run(self):
         result: Any = await self._loop.run_in_executor(
             None,
-            self._function,
-            *self._function_args,
+            lambda: self._function(*self._function_args),  # Wrap the function call in a lambda
         )
 
         return result
